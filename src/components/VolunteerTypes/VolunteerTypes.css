@@ -1,0 +1,11 @@
+.img{
+    height: 300px;
+}
+.card{
+    margin-top: 10px;
+    border-color: white;
+    border-radius:10px;
+}
+.row{
+    margin-top: 20px;
+}

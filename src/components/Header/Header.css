@@ -1,0 +1,12 @@
+.container {
+    margin-top : 20px;
+    font-size : 20px;
+}
+.button {
+    padding: 8px 30px 8px 30px;
+    margin-left: 15px;
+}
+.logo{
+    height: 50px;
+    margin-right: 100px;
+}
