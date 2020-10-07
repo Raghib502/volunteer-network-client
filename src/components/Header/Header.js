@@ -3,10 +3,10 @@ import { Button, Nav } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Header.css';
 import logo from '../../logos/Group 1329.png';
-import { useHistory } from 'react-router-dom';
+import { Link} from 'react-router-dom';
+
 const Header = () => {
 
-    const history = useHistory();
     return (
         <div className="container">
          <Nav className="justify-content-end">
@@ -24,7 +24,7 @@ const Header = () => {
                 <Nav.Link >Blog</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                <Button variant="primary" onClick={() => history.push('/login')} className="button">Register</Button>
+                <Link to="/login"><Button variant="primary" className="button">Register</Button></Link>
                 </Nav.Item>
                 <Nav.Item>
                 <Button variant="dark" className="button">Admin</Button>

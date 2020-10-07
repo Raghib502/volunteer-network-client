@@ -1,67 +1,53 @@
 import React, { useContext, useState } from 'react';
 import "firebase/auth";
-import { handleGoogleSignIn, handleSignedOut, initializeLoginFramework } from './LoginManager';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import { UserContext } from '../../App';
 import logo from '../../logos/Group 1329.png';
 import './Login.css';
 import icon from '../../logos/google.png'
+import * as firebase from "firebase/app";
+import "firebase/auth";
+import firebaseConfig from './firebase.config';
+
+
+
+
+  
+ firebase.initializeApp(firebaseConfig);
 
 const Login = () => {
 
-    const[newUser, setNewUaser]= useState(false);
-    const [user, setUser] = useState({
-      isSignedIn: false,
-      name: '',
-      email:'',
-      password:'',
-    });
+const [loggedInUser, setLoggedInUser] = useContext(UserContext)
+const history = useHistory();
+const location = useLocation();
+const { from } = location.state || { from: { pathname: "/" } };
 
-    initializeLoginFramework();
 
-  const[loggedInUser, setLoggedInUser] = useContext(UserContext);
-  const history = useHistory();
-  const location = useLocation();
-  let { from } = location.state || { from: { pathname: "/" } };
+const provider = new firebase.auth.GoogleAuthProvider();
+const handleGoogleSignIn = () => {
+    firebase.auth().signInWithPopup(provider)
+        .then(function (result) {
+            const { displayName, email } = result.user;
+            const signedInUser = { name: displayName, email }
+            setLoggedInUser(signedInUser);
+            history.replace(from);
 
-  const googleSignIn =() => {
-    handleGoogleSignIn()
-    .then(res =>{
-       handleResponse(res, true);
-    })
+        }).catch(function (error) {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            console.log(errorCode, errorMessage)
+        });
 }
-
-
-const handleResponse = (res, redirect) =>{
-    setUser(res);
-    setLoggedInUser(res);
-    if(redirect){
-        history.replace(from);
-    }
-}
-
-const signOut = () => {
-    handleSignedOut()
-    .then(res =>{
-        handleResponse(res, false);
-    })
-} 
     return (
         <div >
           <div>
             <img className='logoo' src={logo} alt=""/>
           </div>
           <div id="nav">
-          <Button className="signInMethod" onClick={googleSignIn}> <img className='icon' src={icon} alt=""/> Continue with Google</Button>  
+          <Button className="signInMethod" onClick={handleGoogleSignIn}> <img className='icon' src={icon} alt=""/> Continue with Google</Button>  
           <p>Don't have an account? <a id='span' href='/'>Create an account</a></p>
           <br/>
-          {
-            user.isSignedIn && <div><p>Welcome, {user.name}</p>
-            </div>
-          }
-          <p style={{color:'red'}}>{user.error}</p>
-          {user.success && <p style={{color:'green'}}>User {newUser ? 'created' : 'Logged In'} successfully</p>}
           </div>
 
 

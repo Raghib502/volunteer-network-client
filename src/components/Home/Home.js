@@ -1,18 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Button, Form, FormControl, Row } from 'react-bootstrap';
-import fakeData from '../../fakedata/volunteerList'
+
 import Header from '../Header/Header';
 import VolunteerTypes from '../VolunteerTypes/VolunteerTypes';
 import './Home.css';
+
 const Home = () => {
-    
-    // const [allEvents, setAllEvents] = useState([]);
-    // useEffect(() => {
-    //     fetch('http://localhost:4000/allEvent')
-    //         .then(res => res.json())
-    //         .then(data => setAllEvents(data))
-    //         .catch(error => console.log(error))
-    // }, [])
     
     return (
              
@@ -26,11 +19,7 @@ const Home = () => {
             </Form>
             
             <Row className="row">
-
              <VolunteerTypes></VolunteerTypes>
-                {/* {
-                    allEvents.map(allEvent => <VolunteerTypes volunteerType={allEvent} />)
-                } */}
             </Row>
         </div>
 

@@ -1,24 +1,26 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import { UserContext } from '../../App';
 import logo from '../../logos/Group 1329.png';
+import './Registration.css';
 
 const Registration = () => {
-    const { registration, errors, handleRegistration } = useForm();
-    const {_id} = useParams();
+    const { handleSubmit } = useForm();
+    const {name} = useParams();
     const [loggedInUser, setLoggedInUser] = useContext(UserContext)
     const [volunteer, setVolunteer] = useState({});
+    const history = useHistory();
 
     useEffect(() => {
-        fetch('http://localhost:4000/event/'+_id)
+        fetch('http://localhost:4000/event/'+name)
             .then(res => res.json())
             .then(data => setVolunteer(data))
-    }, [_id])
+    }, [name])
 
-    const onSubmit = data => {
-        const userData = {...data, ...volunteer}
+    const onSubmit = (data) => {
+        const userData = {...data, image:volunteer.image}
         fetch('http://localhost:4000/addUser', {
             method: 'POST',
             headers: {
@@ -32,6 +34,9 @@ const Registration = () => {
                     alert('Submit done')
                 }
             })
+            if (userData.image) {
+                history.push('/enrollEvent')
+            }
     };
 
 
@@ -40,32 +45,27 @@ const Registration = () => {
             <div>
             <img className='logoo' src={logo} alt=""/>
             </div>
-            <Form onSubmit={handleRegistration(onSubmit)}>
-                <Form.Group controlId="formBasicEmail">
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control defaultValue={loggedInUser.name} type="email"  placeholder="Enter email" ref={registration({ required: true })} />
-                    <br/>
-                        {errors.Name && <span>your name is required<br /></span>}
+             <div>
+                <h4>Register as a {volunteer.name}</h4>
+<Form onSubmit={handleSubmit(onSubmit)} className='form'>
+                <Form.Group controlId="">
+                    <Form.Control defaultValue={loggedInUser.name} type="name"  placeholder="name"/>                   
                 </Form.Group>
-                <Form.Group controlId="formBasicPassword">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control defaultValue={loggedInUser.email} type="password" placeholder="Password" ref={registration({ required: true })} />
-                    <br />
-                        {errors.email && <span>your email is required<br /></span>}
-
+                <Form.Group controlId="">    
+                    <Form.Control defaultValue={loggedInUser.email} type="email" placeholder="emeil"/>
                 </Form.Group>
                 <Form.Group controlId="">
-                    <Form.Label>Date</Form.Label>
-                    <Form.Control defaultValue={loggedInUser.date} type="date" placeholder="Date" ref={registration({ required: true })} />
+                    <Form.Control type="date" placeholder="Date"/>
                 </Form.Group> 
                 <Form.Group controlId="">
-                    <Form.Label>Description</Form.Label>
-                    <Form.Control defaultValue={loggedInUser.event} type="text" placeholder="Organize books at the library." ref={registration({ required: true })} />
+                    <Form.Control defaultValue={volunteer.event} type="text" placeholder="Organize books at the library."/>
                 </Form.Group>
+                <Link to= '/enrollEvent'>
                 <Button variant="primary" type="submit">
                     Registration
-                </Button>
+                </Button></Link>
              </Form>
+            </div>
         </div>
     );
 };

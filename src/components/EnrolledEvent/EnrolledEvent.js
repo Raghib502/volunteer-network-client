@@ -6,14 +6,15 @@ const EnrolledEvent = () => {
 
     const [enrollEvent, setEnrollEvent] = useState([]);
     const [loggedInUser, setLoggedInUser] = useContext(UserContext)
+    console.log(enrollEvent);
     useEffect(() => {
-        fetch('http://localhost:4000/userInfo?email=' + loggedInUser.email)
+        fetch('http://localhost:4000/userInfo' + loggedInUser.email)
             .then(res => res.json())
             .then(data => setEnrollEvent(data));
-    })
+    },[loggedInUser.email])
 
     const deleteEvent = (id) => {
-        fetch(`http://localhost:4000/deleteUser/${id}`, {
+        fetch('http://localhost:4000/deleteUser/' + id, {
             method: 'DELETE'
         })
             .then(res => res.json())
