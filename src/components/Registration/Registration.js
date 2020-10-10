@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { UserContext } from '../../App';
 import logo from '../../logos/Group 1329.png';
 import './Registration.css';
@@ -13,15 +13,17 @@ const Registration = () => {
     const [volunteer, setVolunteer] = useState({});
     const history = useHistory();
 
+
     useEffect(() => {
-        fetch('http://localhost:4000/event/'+name)
+        fetch('https://obscure-bayou-60480.herokuapp.com/event/'+name)
             .then(res => res.json())
-            .then(data => setVolunteer(data))
+            .then(data => setVolunteer(data[0]))
+
     }, [name])
 
     const onSubmit = (data) => {
-        const userData = {...data, image:volunteer.image}
-        fetch('http://localhost:4000/addUser', {
+        const userData = {email:loggedInUser.email, name:volunteer.name, image:volunteer.image}
+        fetch('https://obscure-bayou-60480.herokuapp.com/addUser', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -32,11 +34,9 @@ const Registration = () => {
             .then(data => {
                 if (data) {
                     alert('Submit done')
+                    history.push('/enrollEvent')
                 }
             })
-            if (userData.image) {
-                history.push('/enrollEvent')
-            }
     };
 
 
@@ -55,15 +55,15 @@ const Registration = () => {
                     <Form.Control defaultValue={loggedInUser.email} type="email" placeholder="emeil"/>
                 </Form.Group>
                 <Form.Group controlId="">
-                    <Form.Control type="date" placeholder="Date"/>
+                    <Form.Control  type="date" placeholder="Date"/>
                 </Form.Group> 
                 <Form.Group controlId="">
-                    <Form.Control defaultValue={volunteer.event} type="text" placeholder="Organize books at the library."/>
+                    <Form.Control defaultValue={volunteer.name} type="text" placeholder="Organize books at the library."/>
                 </Form.Group>
-                <Link to= '/enrollEvent'>
+                
                 <Button variant="primary" type="submit">
                     Registration
-                </Button></Link>
+                </Button>
              </Form>
             </div>
         </div>

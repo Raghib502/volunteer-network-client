@@ -5,14 +5,13 @@ import {
   Switch,
   Route,
 } from "react-router-dom";
-import Header from './components/Header/Header';
+
 import Home from './components/Home/Home';
-import NotFound from './components/NotFound/NotFound';
 import Login from './components/Login/Login';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
-import VolunteerTypes from './components/VolunteerTypes/VolunteerTypes';
 import Registration from './components/Registration/Registration';
 import EnrolledEvent from './components/EnrolledEvent/EnrolledEvent';
+import Admin from './components/Admin/Admin';
 
 
 export const UserContext = createContext();
@@ -27,6 +26,9 @@ function App() {
           <Route exact path="/">
             <Home/>
           </Route>
+          <Route path="/home">
+            <Home/>
+          </Route>
           <Route path="/login">
               <Login />
             </Route>
@@ -36,9 +38,9 @@ function App() {
             <PrivateRoute path="/enrollEvent">
               <EnrolledEvent></EnrolledEvent>
             </PrivateRoute>
-          <Route path="*">
-            <NotFound></NotFound>
-          </Route>
+            <PrivateRoute path='/admin'>
+              <Admin></Admin>
+            </PrivateRoute>
         </Switch>
       </Router>
     </div>
