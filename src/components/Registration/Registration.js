@@ -6,12 +6,25 @@ import { UserContext } from '../../App';
 import logo from '../../logos/Group 1329.png';
 import './Registration.css';
 
+
 const Registration = () => {
     const { handleSubmit } = useForm();
     const {name} = useParams();
     const [loggedInUser, setLoggedInUser] = useContext(UserContext)
     const [volunteer, setVolunteer] = useState({});
     const history = useHistory();
+
+
+    const [selectedDate, setSelectedDate] = useState({
+        date: new Date()
+    });
+
+    const handleEventDate = (date) => {
+        const newDates = { ...selectedDate }
+        newDates.date = date;
+        setSelectedDate(newDates);
+        
+    };
 
 
     useEffect(() => {
@@ -22,7 +35,7 @@ const Registration = () => {
     }, [name])
 
     const onSubmit = (data) => {
-        const userData = {email:loggedInUser.email, name:volunteer.name, image:volunteer.image}
+        const userData = {...selectedDate, email:loggedInUser.email, name:volunteer.name, image:volunteer.image}
         fetch('https://obscure-bayou-60480.herokuapp.com/addUser', {
             method: 'POST',
             headers: {
@@ -43,28 +56,29 @@ const Registration = () => {
     return (
         <div>
             <div>
-            <img className='logoo' src={logo} alt=""/>
+                <img className='logoo' src={logo} alt=""/>
             </div>
-             <div>
+            <div>
                 <h4>Register as a {volunteer.name}</h4>
-<Form onSubmit={handleSubmit(onSubmit)} className='form'>
-                <Form.Group controlId="">
-                    <Form.Control defaultValue={loggedInUser.name} type="name"  placeholder="name"/>                   
-                </Form.Group>
-                <Form.Group controlId="">    
-                    <Form.Control defaultValue={loggedInUser.email} type="email" placeholder="emeil"/>
-                </Form.Group>
-                <Form.Group controlId="">
-                    <Form.Control  type="date" placeholder="Date"/>
-                </Form.Group> 
-                <Form.Group controlId="">
-                    <Form.Control defaultValue={volunteer.name} type="text" placeholder="Organize books at the library."/>
-                </Form.Group>
+               <Form onSubmit={handleSubmit(onSubmit)} className='form'>
+                    <Form.Group controlId="">
+                        <Form.Control value={loggedInUser.name} type="name"  placeholder="name"/>                   
+                    </Form.Group>
+                    <Form.Group controlId="">    
+                        <Form.Control value={loggedInUser.email} type="email" placeholder="email"/>  
+                    </Form.Group>
+                    <Form.Group controlId="date">
+                        <Form.Control placeholder="Date" value={selectedDate.date} onChange={handleEventDate}/>
+                    </Form.Group> 
                 
-                <Button variant="primary" type="submit">
-                    Registration
-                </Button>
-             </Form>
+                    <Form.Group controlId="">
+                        <Form.Control defaultValue={volunteer.name} type="text" placeholder="Organize books at the library."/>
+                    </Form.Group>
+                    
+                    <Button variant="primary" type="submit">
+                        Registration
+                    </Button>
+                </Form>
             </div>
         </div>
     );

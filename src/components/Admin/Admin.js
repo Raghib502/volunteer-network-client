@@ -1,6 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Button, Table } from 'react-bootstrap';
 import { UserContext } from '../../App';
+import logo from '../../logos/Group 1329.png';
+import './Admin.css';
+
 
 const Admin = () => {
 
@@ -24,6 +27,11 @@ const Admin = () => {
     }
     return (
         <div>
+            <div  className='container'>
+                <img id='logo' src={logo} alt=""/>
+                <br/>
+                <h3 id='text'>Volunteer Register List</h3>
+            </div>
             <Table>
                 <thead>
                     <tr>
@@ -39,7 +47,7 @@ const Admin = () => {
                     <tr>
                         <td>{loggedInUser.name}</td>
                         <td>{allEvent.email}</td>
-                        <td></td>
+                        <td>{(new Date(allEvent.date).toDateString('dd/mm/yyyy'))}</td>
                         <td>{allEvent.name}</td>
                         <td><Button onClick={() => deleteEvent(allEvent._id)} variant="danger">Delete</Button></td>
                     </tr>
